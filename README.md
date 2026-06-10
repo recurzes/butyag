@@ -26,7 +26,7 @@ butyag-server/
 
 ```bash
 # From butyag-server/
-python export_onnx.py
+uv run python export_onnx.py
 # Outputs: exports/butyag.onnx
 ```
 
@@ -41,8 +41,8 @@ cp ../butyag/outputs/butyag_best.pth exports/
 
 **Backend:**
 ```bash
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+uv sync                          # installs all deps from pyproject.toml
+uv run uvicorn app.main:app --reload
 # API running at http://localhost:8000
 ```
 
