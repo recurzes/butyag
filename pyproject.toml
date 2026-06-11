@@ -1,7 +1,7 @@
 [project]
 name = "butyag"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.12, <3.13"
 dependencies = [
     "fastapi[all]>=0.136.3",
     "numpy>=2.4.6",
