@@ -8,8 +8,8 @@ import torch.nn as nn
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
-from dataset import get_dataloaders
-from model import build_model
+from training.dataset import get_dataloaders
+from training.model import build_model
 
 
 CONFIG = {
