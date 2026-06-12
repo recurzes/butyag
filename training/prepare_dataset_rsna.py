@@ -50,7 +50,7 @@ def copy_files(files: list[Path], dst_dir: Path, prefix: str = "") -> int:
 
 def split_rsna(rsna_src: Path, dst: Path):
     print("=" * 55)
-    print("  STEP 1 - Splitting RSNA dataset (70 / 15 / 15)")
+    print("  STEP 1 — Splitting RSNA dataset (70 / 15 / 15)")
     print("=" * 55)
     random.seed(SEED)
 
@@ -59,7 +59,7 @@ def split_rsna(rsna_src: Path, dst: Path):
         if not src_cls.exists():
             raise FileNotFoundError(
                 f"Expected '{src_cls}'.\n"
-                f"Make sure rsna_raw/ has NORMAL/ and PNEUMONIA/ subdirectories"
+                f"Make sure rsna_raw/ has NORMAL/ and PNEUMONIA/ subdirectories."
             )
 
         files = collect_images(src_cls)
@@ -71,38 +71,41 @@ def split_rsna(rsna_src: Path, dst: Path):
 
         splits = {
             "train": files[:n_train],
-            "val": files[n_train + n_val :],
+            "val": files[n_train: n_train + n_val],
+            "test": files[n_train + n_val:],
         }
 
         print(f"\n  {cls}  (total: {n_total:,})")
         for split_name, split_files in splits.items():
             n = copy_files(split_files, dst / split_name / cls, prefix="rsna_")
-            print(f"  {split_name:6s}: {n:>6,}")
+            print(f"    {split_name:6s}: {n:>6,}")
 
 
 def merge_chestxray(cxr_src: Path, dst: Path):
     print("\n" + "=" * 55)
-    print("  STEP 2 - Merging ChestXRay2017 into train/")
-    print("  (val/ and test/ untouched - RSNA-only for clean eval)")
+    print("  STEP 2 — Merging ChestXRay2017 into train/")
+    print("  (val/ and test/ untouched — RSNA-only for clean eval)")
     print("=" * 55)
 
+    # Use train/ + test/ from ChestXRay2017 — all goes to dst/train/
+    # Skip the original val/ (16 images, not worth it)
     source_splits = ["train", "test"]
 
     for cls in CLASSES:
         total_copied = 0
-        print(f"\n {cls}")
+        print(f"\n  {cls}")
         for split in source_splits:
             src_cls = cxr_src / split / cls
             if not src_cls.exists():
-                print(f"  {split:6s}: not found, skipping")
+                print(f"    {split:6s}: not found, skipping")
                 continue
 
             files = collect_images(src_cls)
             n = copy_files(files, dst / "train" / cls, prefix=f"cxr_{split}_")
-            print(f"  {split:6s}: {n:>6,} added to train/")
+            print(f"    {split:6s}: {n:>6,} added to train/")
             total_copied += n
 
-        print(f"  total : {total_copied:>6,} images merged")
+        print(f"    total : {total_copied:>6,} images merged")
 
 
 def print_summary(dst: Path):
@@ -121,10 +124,10 @@ def print_summary(dst: Path):
         grand_total += total
         ratio = totals["NORMAL"] / max(totals["PNEUMONIA"], 1)
 
-        print(f"\n {split.upper()}")
+        print(f"\n  {split.upper()}")
         for cls in CLASSES:
-            print(f"  {cls:<12}: {totals[cls]:>7,}")
-        print(f"  {'Total':<12}: {total:>7,} (ratio {ratio:.2f}:1 N:P)")
+            print(f"    {cls:<12}: {totals[cls]:>7,}")
+        print(f"    {'Total':<12}: {total:>7,}  (ratio {ratio:.2f}:1 N:P)")
 
     print(f"\n  GRAND TOTAL: {grand_total:,} images")
     print(f"\n  Output directory: {dst.resolve()}")
