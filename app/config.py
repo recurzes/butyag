@@ -10,3 +10,5 @@ THRESHOLD = 0.47
 
 MAX_FILE_SIZE_MB = 10
 ALLOWED_MIMETYPES = {"image/jpeg", "image/jpg", "image/png"}
+
+IMG_EXTS = ("*.png", "*.jpg", "*.jpeg")
