@@ -8,12 +8,13 @@ import torch
 from torch.utils.data import WeightedRandomSampler
 from torchvision import datasets
 
+from app.config import CLASSES, IMG_EXTS
 
-CLASSES = ["NORMAL", "PNEUMONIA"]
+
 TRAIN_RATIO = 0.70
 VAL_RATIO = 0.15
 SEED = 42
-IMG_EXTS = ("*.png", "*.jpg", "*.jpeg")
+
 
 
 def collect_images(directory: Path) -> list[Path]:
@@ -118,11 +119,11 @@ def print_summary(dst: Path):
 
         total = sum(totals.values())
         grand_total += total
-        ratio = total["NORMAL"] / max(totals["PNEUMONIA"], 1)
+        ratio = totals["NORMAL"] / max(totals["PNEUMONIA"], 1)
 
         print(f"\n {split.upper()}")
         for cls in CLASSES:
-            print(f"  {cls:<12}: {total[cls]:>7,}")
+            print(f"  {cls:<12}: {totals[cls]:>7,}")
         print(f"  {'Total':<12}: {total:>7,} (ratio {ratio:.2f}:1 N:P)")
 
     print(f"\n  GRAND TOTAL: {grand_total:,} images")
