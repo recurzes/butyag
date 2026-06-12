@@ -26,7 +26,7 @@ CONFIG = {
     "unfreeze_block":       6,
 
     "early_stop_patience":  5,
-    "pos_weight":           2.5
+    "pos_weight":           3.3
 }
 
 
