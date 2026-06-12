@@ -1,0 +1,6 @@
+torchvision>=0.27.0
+matplotlib>=3.10.9
+onnx>=1.21.0
+onnxscript>=0.7.0
+scikit-learn
+
