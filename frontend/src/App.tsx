@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, DragEvent, ChangeEvent } from "react";
+import { useState, useRef, useCallback, type DragEvent, type ChangeEvent } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "";
 
