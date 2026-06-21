@@ -2,3 +2,4 @@
 data/
 rsna_raw/
 __pycache__/
+/.env
