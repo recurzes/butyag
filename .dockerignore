@@ -8,4 +8,4 @@ frontend/dist/
 .cursor/
 *.md
 outputs/training_history.json
-training/
+training/__pycache__/
