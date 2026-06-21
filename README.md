@@ -51,7 +51,7 @@ uv run uvicorn app.main:app --reload
 cd frontend
 npm install
 npm run dev
-# UI at http://localhost:5173
+# UI at http://localhost:5173 — /predict is proxied to the backend on :8000
 ```
 
 ---

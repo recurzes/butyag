@@ -7,7 +7,6 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from PIL import Image
-from sympy.physics import pring
 from torch.autograd import backward
 from torchvision import transforms
 

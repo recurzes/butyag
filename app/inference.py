@@ -58,7 +58,11 @@ def _get_gradcam_model(pth_path: str):
     global _gradcam_model
     if _gradcam_model is None:
         import sys
-        sys.path.insert(0, "../butyag/src")
+        from pathlib import Path
+
+        repo_root = Path(__file__).resolve().parents[1]
+        if str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
         from training.model import build_model
         from training.predict import GradCAM
 
@@ -83,7 +87,7 @@ def generate_gradcam(
         model, grad_cam = _get_gradcam_model(pth_path)
 
         tensor = _transform(original_img.resize((IMAGE_SIZE, IMAGE_SIZE)))
-        tensor = tensor.unsquueze(0)
+        tensor = tensor.unsqueeze(0)
 
         cam = grad_cam.generate(tensor)
 
