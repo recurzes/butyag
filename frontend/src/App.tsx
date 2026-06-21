@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, DragEvent, ChangeEvent } from "react";
 
-const API_URL = "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 // ── Color tokens ──────────────────────────────────────────────────────────────
 // Deep clinical navy + clean white + alert red/green — no warm cream, no acid green

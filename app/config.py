@@ -1,5 +1,5 @@
 ONNX_MODEL_PATH = "exports/butyag.onnx"
-PTH_MODEL_PATH = "exporta/butyag_best.onnx"
+PTH_MODEL_PATH = "exports/butyag_best.pth"
 
 IMAGE_SIZE = 300
 MEAN = [0.485, 0.456, 0.406]

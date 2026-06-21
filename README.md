@@ -63,18 +63,42 @@ with the Youden's J value printed to console.
 
 ---
 
-## Step 4 — Deploy (Docker + Dokploy)
+## Step 4 — Deploy (Docker Compose + Dokploy)
+
+### Generate model artifacts (once)
 
 ```bash
-# Build
-docker build -t butyag-server .
-
-# Run
-docker run -p 8000:8000 butyag-server
+cd training
+uv run python export_onnx.py
+mv exports/butyag.onnx ../exports/
+cp ../outputs/butyag_best.pth ../exports/
 ```
 
-Add to Dokploy as a Docker app — set port 8000, mount `exports/` as a volume
-if you want to swap model weights without rebuilding the image.
+### Local Docker Compose
+
+```bash
+docker compose up -d --build
+```
+
+Assign a domain to the `frontend` service (port 80). The frontend nginx proxies `/predict` to the internal backend.
+
+### Dokploy
+
+1. Push repo with `docker-compose.yml`
+2. New Project → Compose → **Docker Compose** (not Stack)
+3. Compose path: `docker-compose.yml`
+4. **Domains tab** — add domain for service `frontend`, container port **80**, enable HTTPS
+5. Do **not** expose `backend` publicly
+6. Deploy
+
+Environment variables (optional, set in Dokploy UI):
+
+| Variable | Purpose |
+|----------|---------|
+| `VITE_API_URL` | Leave empty in production (same-origin proxy) |
+| `CORS_ORIGINS` | Comma-separated origins for local dev |
+
+See [`.env.example`](.env.example) for defaults.
 
 ---
 

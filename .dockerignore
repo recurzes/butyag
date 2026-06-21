@@ -1,0 +1,11 @@
+.venv/
+.git/
+.gitignore
+**/__pycache__/
+**/*.pyc
+frontend/node_modules/
+frontend/dist/
+.cursor/
+*.md
+outputs/training_history.json
+training/
