@@ -80,14 +80,34 @@ cp ../outputs/butyag_best.pth ../exports/
 docker compose up -d --build
 ```
 
-Assign a domain to the `frontend` service (port 80). The frontend nginx proxies `/predict` to the internal backend.
+Assign a domain to the `frontend` service (container port **80**). The frontend nginx proxies `/predict` to the internal backend over `dokploy-network`.
+
+**Ports (production vs dev):**
+
+| Context | Port | Notes |
+|---------|------|-------|
+| Local Vite dev | **5173** | `npm run dev` only — not used in Docker |
+| Docker frontend (container) | **80** | nginx inside the image |
+| Docker frontend (host) | **5175** | `ports: "5175:80"` in compose — for Cloudflare Tunnel |
+| Backend (internal) | **8080** | Not published; reached as `backend:8080` from frontend |
+
+**Cloudflare Tunnel** (point tunnel at host port 5175):
+
+```yaml
+ingress:
+  - hostname: your-domain.example.com
+    service: http://127.0.0.1:5175
+  - service: http_status:404
+```
+
+Use Cloudflare Tunnel **or** Dokploy Domains — not both on the same hostname (avoids double-proxy 502s).
 
 ### Dokploy
 
 1. Push repo with `docker-compose.yml`
 2. New Project → Compose → **Docker Compose** (not Stack)
 3. Compose path: `docker-compose.yml`
-4. **Domains tab** — add domain for service `frontend`, container port **80**, enable HTTPS
+4. **Domains tab** (if not using Cloudflare Tunnel) — add domain for service `frontend`, container port **80**, enable HTTPS
 5. Do **not** expose `backend` publicly
 6. Deploy
 
